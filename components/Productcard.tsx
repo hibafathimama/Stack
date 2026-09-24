@@ -71,18 +71,18 @@ export default function ProductCard({
 
         {/* Seller Buttons */}
         {role === "seller" && (
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-2 sm:gap-3 mt-4 w-full">
 
             <button
               onClick={() => router.push(`/products/edit/${product._id}`)}
-              className="w-28 h-11 bg-[#E8D8C3] text-[#6B4F3A] rounded-lg font-semibold border border-[#D6C1A8] hover:bg-[#DCC8AE] transition duration-200"
+              className="flex-1 sm:flex-none sm:w-28 h-10 sm:h-11 w-28 h-11 bg-[#E8D8C3] text-[#6B4F3A] rounded-lg font-semibold border border-[#D6C1A8] hover:bg-[#DCC8AE] transition duration-200"
             >
               Update
             </button>
 
             <button
               onClick={() => onDelete(product._id)}
-              className="w-28 h-11 bg-[#F3D6D6] text-[#A94442] rounded-lg font-semibold border border-[#E6B8B8] hover:bg-[#EBC3C3] transition duration-200"
+              className="flex-1 sm:flex-none sm:w-28 h-10 sm:h-11 w-28 h-11 bg-[#F3D6D6] text-[#A94442] rounded-lg font-semibold border border-[#E6B8B8] hover:bg-[#EBC3C3] transition duration-200"
             >
               Delete
             </button>
