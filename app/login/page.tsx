@@ -28,7 +28,7 @@ export default function LoginPage() {
     
  const onsubmit = async(data :LoginForm)=>{
     try{
-        const response=await api.post("/users/login",data)
+        const response = await api.post("/users/login",data)
 
         const token = response.data.accestoken
         const role = response.data.data.role
