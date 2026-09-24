@@ -2,17 +2,27 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { cookies } from "next/headers"
+
 
 
 export default function Header() {
    const router = useRouter()
 
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    await fetch("/api/auth/clear-cookie", {
+      method: "POST",
+    })
+
     localStorage.removeItem("token")
     localStorage.removeItem("user")
 
     router.push("/login")
+  } catch (error) {
+    console.log("Logout error:", error)
   }
+}
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

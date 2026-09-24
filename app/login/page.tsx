@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation"
 import api from "@/lib/api"
 
 
+
+
 const loginschema= yup.object({
     email:yup.string().email("Enter a valid email").required("email is required"),
     password:yup.string().required("password is required")
@@ -27,17 +29,28 @@ export default function LoginPage() {
  const onsubmit = async(data :LoginForm)=>{
     try{
         const response=await api.post("/users/login",data)
-        console.log("LOGIN RESPONSE:", response.data)
 
-        const token=response.data.accestoken
-        const user = response.data.data
+        const token = response.data.accestoken
+        const role = response.data.data.role
 
-         // Save user information
-        localStorage.setItem("user",JSON.stringify(user))
-        //save token 
-        localStorage.setItem("token",token)
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.data)
+        )
 
-        alert("Login successful")
+        localStorage.setItem("token", token)
+
+        await fetch("/api/auth/set-cookie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            role: role,
+          }),
+        })
+
         router.push("/products")
 
 

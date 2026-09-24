@@ -1,12 +1,13 @@
-import {cookies} from "next/headers"
+import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-export const POST = async()=>{
+export const POST = async () => {
+  const cookieStore = await cookies()
 
-    const cookieStore = await cookies();
-    cookieStore.delete('token')
-    cookieStore.delete('role')
+  cookieStore.delete("token")
+  cookieStore.delete("role")
 
-    return NextResponse.json({message:"cookies cleared successfully"})
-
+  return NextResponse.json({
+    message: "cookies cleared successfully",
+  })
 }
