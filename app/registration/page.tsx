@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import api from "@/lib/api"
 import Link from "next/link"
+import { useRouter } from "next/navigation";
 
 const schema = yup.object({
   firstName: yup
@@ -30,12 +31,21 @@ const schema = yup.object({
     .required("Role is required"),
 
   image: yup
-    .mixed<FileList>()
-    .required("Image is required"),
+  .mixed<FileList>()
+  .test(
+    "required",
+    "Image is required",
+    (value) => {
+      if (!value) return false;
+
+      return value.length > 0;
+    }
+  ),
 })
 
 type RegistrationForm = yup.InferType<typeof schema>
 export default function RegistrationPage() {
+  const router = useRouter();
 
   const {
   register,
@@ -62,6 +72,9 @@ export default function RegistrationPage() {
       console.log("RESPONSE:", response.data)
 
       alert("Registration successful")
+      if(response.data){
+        router.push("/login")
+      }
 
     } catch (error: any) {
 
@@ -104,8 +117,8 @@ export default function RegistrationPage() {
               type="text"
               placeholder="Enter your first name"
               {...register("firstName")}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-black placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+               />
 
             {errors.firstName && (
               <p className="text-red-500 text-sm mt-1">
@@ -124,7 +137,7 @@ export default function RegistrationPage() {
               type="text"
               placeholder="Enter your last name"
               {...register("lastName")}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black "
             />
 
             {errors.lastName && (
@@ -144,7 +157,7 @@ export default function RegistrationPage() {
               type="email"
               placeholder="Enter your email"
               {...register("email")}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
             />
 
             {errors.email && (
@@ -164,7 +177,7 @@ export default function RegistrationPage() {
               type="password"
               placeholder="Enter your password"
               {...register("password")}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
             />
 
             {errors.password && (
@@ -223,6 +236,7 @@ export default function RegistrationPage() {
           >
             Register
           </button>
+          
 
         </form>
         <p className="text-center text-gray-600 mt-6">

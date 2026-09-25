@@ -13,15 +13,25 @@ const schema = yup.object({
   price: yup
     .number()
     .typeError("Price must be a number")
-    .required("Price is required"),
+    .required("Price is required")
+    .moreThan(0,"price must be greater than 0"),
 
   cateogary: yup.string().required("Category is required"),
 
-  description: yup.string().required("Description is required"),
+  description: yup.string().required("Description is required")
+  .min(10,"Description must be atleast 10 letters"),
 
   image: yup
     .mixed<FileList>()
-    .required("Image is required"),
+    .test(
+      "required",
+      "image is required",
+      (value) =>{
+      const files = value as FileList | undefined;
+      return !!files && files.length > 0;
+
+      }
+    ),
 })
 
 type ProductForm = yup.InferType<typeof schema>

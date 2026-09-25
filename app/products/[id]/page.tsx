@@ -5,10 +5,14 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import api from "@/lib/api"
 import { ProductType } from "@/types/product"
+import {useRouter} from "next/navigation"
+
 
 
 export default function ProductPage() {
   const params = useParams()
+  const router = useRouter()
+  
 
     // Get product id from URL
   const id =params.id as string
@@ -18,6 +22,9 @@ export default function ProductPage() {
 
   //loading state
   const [loading,setLoading]=useState(true)
+
+  const [user, setUser] = useState<any>(null);
+
 
   //get one product from the backend
   const getproduct = async()=>{
@@ -42,8 +49,15 @@ export default function ProductPage() {
 
     //run when page loads
     useEffect(()=>{
+
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+
       getproduct()
     },[id])
+    const role = user?.role;
 
       // Show loading message
   if (loading) {
@@ -136,11 +150,24 @@ export default function ProductPage() {
               </p>
 
               {/* Buy button */}
-              <button
-                className="mt-8 w-full bg-[#6B4F3A] text-white py-3 rounded-xl font-semibold hover:bg-[#543C2C] transition"
-              >
-                Buy Now
-              </button>
+            {role === "seller" ? (
+          <button
+          onClick={() =>
+            user?.role === "seller"
+              ? router.push(`/products/edit/${product._id}`)
+              : console.log("Buy Now clicked")
+          }
+          className="flex-1 sm:flex-none sm:w-28 h-10 sm:h-11 w-28 bg-[#E8D8C3] text-[#6B4F3A] rounded-lg font-semibold border border-[#D6C1A8] hover:bg-[#DCC8AE] transition duration-200"
+        >
+          {user?.role === "seller" ? "Update" : "Buy Now"}
+        </button>
+          ) : (
+            <button
+              className="mt-8 w-full bg-[#6B4F3A] text-white py-3 rounded-xl font-semibold hover:bg-[#543C2C] transition"
+            >
+              Buy Now
+            </button>
+          )}
 
             </div>
 
